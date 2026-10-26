@@ -2,19 +2,19 @@
 
 A selectable-duty PWM generator built in Logisim Evolution. One PWM period is
 8 clock ticks, and the switch you press sets how many of those ticks the
-output stays high: from 0/8 to 8/8 in steps of 12.5%.
+output stays high, anywhere from 0/8 to 8/8 in steps of 12.5%.
 
 ![PWM output at 5/8 duty](images/pwm_5of8.png)
 
-*Switch 5 pressed: the output is high for 5 ticks and low for 3 in every 8-tick period.*
+*With switch 5 pressed, the output is high for 5 ticks and low for 3 in every 8-tick period.*
 
 ## How It Works
 
 - A 3-bit counter runs from 0 to 7 on every clock tick and wraps around. This
   sets the 8-tick PWM period.
 - The DIP switches feed a Priority Encoder, which outputs the index of the
-  highest switch that is on as the duty value `N` (0–7). Lower switches are
-  ignored: with switches 1, 2, 3, 4, 5 and 6 all on, `N = 6` and the output
+  highest switch that is on as the duty value `N` (0 to 7). Lower switches are
+  ignored, so with switches 1, 2, 3, 4, 5 and 6 all on, `N = 6` and the output
   is high for 6/8 of the period.
 - `N` is stored in a 3-bit register on the clock, so the comparator always
   reads a stable value.
@@ -22,7 +22,7 @@ output stays high: from 0/8 to 8/8 in steps of 12.5%.
   the 8 counter values, so the output is high for `N` ticks per period.
 - Switch 8 bypasses the comparator and goes straight into an OR gate, which
   holds the output high for the full period (8/8, 100%).
-- The single switch on the left is encoder input 0: 0/8, output always low.
+- The single switch on the left is encoder input 0, which gives 0/8 and keeps the output low.
 
 ### Signal Flow
 ```
