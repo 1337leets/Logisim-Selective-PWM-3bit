@@ -12,16 +12,17 @@ output stays high: from 0/8 to 8/8 in steps of 12.5%.
 
 - A 3-bit counter runs from 0 to 7 on every clock tick and wraps around. This
   sets the 8-tick PWM period.
-- The DIP switches feed a Priority Encoder. If more than one switch is on, the
-  highest one wins. The encoder outputs the duty value `N` (0–7).
+- The DIP switches feed a Priority Encoder, which outputs the index of the
+  highest switch that is on as the duty value `N` (0–7). Lower switches are
+  ignored: with switches 1, 2, 3, 4, 5 and 6 all on, `N = 6` and the output
+  is high for 6/8 of the period.
 - `N` is stored in a 3-bit register on the clock, so the comparator always
   reads a stable value.
 - An unsigned comparator checks `N > counter`. That is true for exactly `N` of
   the 8 counter values, so the output is high for `N` ticks per period.
 - Switch 8 bypasses the comparator and goes straight into an OR gate, which
   holds the output high for the full period (8/8, 100%).
-- The single switch on the left is encoder input 0 (0/8, output always low).
-  It also keeps the encoder output valid when no other switch is on.
+- The single switch on the left is encoder input 0: 0/8, output always low.
 
 ### Signal Flow
 ```
